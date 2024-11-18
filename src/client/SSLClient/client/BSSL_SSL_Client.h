@@ -40,6 +40,12 @@
 #include "../ESP_SSLClient_FS.h"
 #include "../ESP_SSLClient_Const.h"
 
+#if defined __has_include
+#if __has_include(<esp_idf_version.h>)
+#include <esp_idf_version.h>
+#endif
+#endif
+
 #if defined(USE_EMBED_SSL_ENGINE) && !defined(ARDUINO_ARCH_RP2040) && !defined(ARDUINO_NANO_RP2040_CONNECT)
 #define EMBED_SSL_ENGINE_BASE_OVERRIDE override
 #else
@@ -104,6 +110,16 @@ public:
     int connect(IPAddress ip, uint16_t port) override;
 
     int connect(const char *host, uint16_t port) override;
+
+#if defined(ESP_IDF_VERSION)
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 3, 0)
+
+    int connect(IPAddress ip, uint16_t port, int32_t timeout)  override;
+
+    int connect(const char *host, uint16_t port, int32_t timeout) override;
+
+#endif
+#endif
 
     uint8_t connected() override;
 

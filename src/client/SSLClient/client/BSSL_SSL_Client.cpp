@@ -1099,6 +1099,15 @@ int BSSL_SSL_Client::connect(const char *host, uint16_t port, const char *rootCA
     return connect(host, port);
 }
 
+#if defined(ESP_IDF_VERSION)
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 3, 0)
+
+int BSSL_SSL_Client::connect(IPAddress ip, uint16_t port, int32_t timeout)  { return -1; }
+int BSSL_SSL_Client::connect(const char *host, uint16_t port, int32_t timeout) { return -1; }
+
+#endif
+#endif
+
 BSSL_SSL_Client &BSSL_SSL_Client::operator=(const BSSL_SSL_Client &other)
 {
     stop();
